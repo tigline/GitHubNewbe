@@ -9,12 +9,14 @@ import SwiftUI
 import Observation
 
 
-enum AppDestination: Hashable {
+enum AppDestination: Hashable, Identifiable {
     case login
     case userList
     case userDetail(username: String)
     case repositoryWebView(url: URL)
     case me
+    
+    var id: Self { self }
 }
 
 
@@ -31,14 +33,42 @@ enum AppTab: Hashable {
 
     var selectedTab: AppTab = .userList
     
+    func selectedTabBinding() -> Binding<AppTab> {
+        Binding(
+            get: { self.selectedTab },
+            set: { self.selectedTab = $0 }
+        )
+    }
+    
 
     var navigationPath = NavigationPath()
+    
+    func navigationPathBinding() -> Binding<NavigationPath> {
+       Binding(
+           get: { self.navigationPath },
+           set: { self.navigationPath = $0 }
+       )
+   }
     
 
     var presentedSheet: AppDestination? = nil
     
+    func presentSheetBinding() -> Binding<AppDestination?> {
+        Binding(
+            get: { self.presentedSheet },
+            set: { self.presentedSheet = $0 }
+        )
+    }
+    
 
     var presentedFullScreenCover: AppDestination? = nil
+    
+    func presentedFullScreenCoverBinding() -> Binding<AppDestination?> {
+        Binding(
+            get: { self.presentedFullScreenCover},
+            set: { self.presentedFullScreenCover = $0 }
+        )
+    }
     
     private init() {}
     

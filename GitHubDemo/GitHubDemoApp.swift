@@ -8,13 +8,22 @@
 import SwiftUI
 
 @main
-struct GitHubDemoApp: App {
-    let persistenceController = PersistenceController.shared
-
+struct GitHubClientApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                .withAppEnvironment() // 注入环境和所有服务
+                .onOpenURL { url in
+                    // 处理OAuth回调URL
+                    if url.absoluteString.starts(with: AppEnvironment.shared.githubOAuthConfig.redirectURI) {
+                        Task {
+                            _ = await AppEnvironment.shared.authState.handleOAuthCallback(url: url)
+                        }
+                    }
+                    
+//                    // 将URL传递给LoginScreen处理
+//                    NotificationCenter.default.post(name: .oauthCallbackReceived, object: url)
+                }
         }
     }
 }

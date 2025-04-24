@@ -6,81 +6,119 @@
 //
 
 import SwiftUI
-import CoreData
 
 struct ContentView: View {
-    @Environment(\.managedObjectContext) private var viewContext
-
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
-        animation: .default)
-    private var items: FetchedResults<Item>
-
+    @Environment(AuthState.self) private var authState
+    @Environment(AppRouter.self) private var router
+    
     var body: some View {
-        NavigationView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp!, formatter: itemFormatter)")
-                    } label: {
-                        Text(item.timestamp!, formatter: itemFormatter)
+        Group {
+            if authState.isLoggedIn {
+                TabView(selection: router.selectedTabBinding()) {
+                    NavigationStack(path: router.navigationPathBinding()) {
+                        UserListScreen()
+                            .navigationDestination(for: AppDestination.self) { destination in
+                                switch destination {
+                                case .userDetail(let username):
+                                    UserDetailScreen(username: username)
+                                default:
+                                    EmptyView()
+                                }
+                            }
+                    }
+                    .tabItem {
+                        Label("Users", systemImage: "person.3")
+                    }
+                    .tag(AppTab.userList)
+                    
+                    // 我的Tab
+                    NavigationStack(path: router.navigationPathBinding()) {
+                        MeScreen()
+                    }
+                    .tabItem {
+                        Label("Me", systemImage: "person.circle")
+                    }
+                    .tag(AppTab.me)
+                }
+                
+                .sheet(item: router.presentSheetBinding()) { destination in
+                    switch destination {
+                    case .repositoryWebView(let url):
+                        SafariView(url: url) {
+                            
+                        }
+                    default:
+                        EmptyView()
                     }
                 }
-                .onDelete(perform: deleteItems)
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
+                .fullScreenCover(item: router.presentedFullScreenCoverBinding()) { destination in
+                    switch destination {
+                    case .login:
+                        LoginScreen()
+                    default:
+                        EmptyView()
                     }
                 }
-            }
-            Text("Select an item")
-        }
-    }
-
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
-
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            offsets.map { items[$0] }.forEach(viewContext.delete)
-
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+            } else {
+                LoginScreen()
             }
         }
     }
 }
-
-private let itemFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateStyle = .short
-    formatter.timeStyle = .medium
-    return formatter
-}()
 
 #Preview {
-    ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+
+    ContentView()
+        .environment(AuthState())
+        .environment(AppRouter.shared)
+    
 }
+
+
+
+
+//// WebView页面实现
+//struct WebViewScreen: View {
+//    let url: URL
+//    @Environment(AppRouter.self) private var router
+//    
+//    var body: some View {
+//        NavigationStack {
+//            WebView(url: url)
+//                .navigationTitle("Repository")
+//                .navigationBarTitleDisplayMode(.inline)
+//                .toolbar {
+//                    ToolbarItem(placement: .navigationBarTrailing) {
+//                        Button("Done") {
+//                            router.dismissSheet()
+//                        }
+//                    }
+//                }
+//        }
+//    }
+//}
+//
+//// WebView实现
+//struct WebView: UIViewRepresentable {
+//    let url: URL
+//    
+//    func makeUIView(context: Context) -> WKWebView {
+//        let webView = WKWebView()
+//        webView.navigationDelegate = context.coordinator
+//        return webView
+//    }
+//    
+//    func updateUIView(_ webView: WKWebView, context: Context) {
+//        let request = URLRequest(url: url)
+//        webView.load(request)
+//    }
+//    
+//    func makeCoordinator() -> Coordinator {
+//        Coordinator()
+//    }
+//    
+//    class Coordinator: NSObject, WKNavigationDelegate {
+//        // 可以在这里处理WebView导航事件
+//    }
+//}
+
