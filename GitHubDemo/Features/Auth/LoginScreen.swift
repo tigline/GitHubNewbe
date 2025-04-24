@@ -18,7 +18,7 @@ struct LoginScreen: View {
     init() {
         // 创建视图模型并注入依赖
         _viewModel = State(initialValue: LoginScreenViewModel(
-            authState: AuthState(),
+            authState: AuthState.shared,
             router: AppRouter.shared,
             environment: AppEnvironment.shared
         ))
@@ -122,7 +122,7 @@ struct LoginScreen: View {
 // 预览
 #Preview {
     LoginScreen()
-        .environment(AuthState())
+        .environment(AuthState.shared)
         .environment(AppRouter.shared)
         .environment(\.appEnvironment, AppEnvironment.shared)
 }

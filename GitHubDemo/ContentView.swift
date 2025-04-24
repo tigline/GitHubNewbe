@@ -69,7 +69,7 @@ struct ContentView: View {
 #Preview {
 
     ContentView()
-        .environment(AuthState())
+        .environment(AuthState.shared)
         .environment(AppRouter.shared)
     
 }

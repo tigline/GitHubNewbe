@@ -9,6 +9,8 @@ import Foundation
 import SwiftUI
 
 @Observable class AuthState {
+    
+    static let shared = AuthState()
     // 登录状态
     var isLoggedIn: Bool = false
     
@@ -24,7 +26,7 @@ import SwiftUI
     // KeyChain服务标识符
     private let keychainServiceID = "com.githubclient.auth"
     
-    init() {
+    private init() {
         loadTokenFromKeychain()
     }
     
@@ -33,7 +35,7 @@ import SwiftUI
         if let token = KeychainHelper.shared.read(service: keychainServiceID, account: "github_access_token") {
             self.accessToken = token
             self.isLoggedIn = true
-            
+            GitHubAPI.shared.setToken(token)
             // 获取当前用户信息
             Task {
                 await fetchCurrentUser()

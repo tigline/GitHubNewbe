@@ -12,11 +12,15 @@ struct MeScreen: View {
     @Environment(AppRouter.self) private var router
     
     @State private var viewModel: MeViewModel
+//    @State private var viewModel = MeViewModel(
+//        authState: AuthState.shared,  // 使用单例
+//        router: AppRouter.shared
+//    )
     
     init() {
-        // 创建视图模型并注入依赖
+         //创建视图模型并注入依赖
         _viewModel = State(initialValue: MeViewModel(
-            authState: AuthState(),
+            authState: AuthState.shared,
             router: AppRouter.shared
         ))
     }
@@ -168,7 +172,7 @@ struct MeScreen: View {
 #Preview {
     NavigationView {
         MeScreen()
-            .environment(AuthState())
+            .environment(AuthState.shared)
             .environment(AppRouter.shared)
     }
 }

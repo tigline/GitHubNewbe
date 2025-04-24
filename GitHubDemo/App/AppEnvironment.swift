@@ -70,7 +70,7 @@ enum EnvironmentType {
         self.githubAPI = GitHubAPI(apiClient: apiClient)
         
         // 初始化认证状态
-        self.authState = AuthState()
+        self.authState = AuthState.shared
         
         // 初始化路由器
         self.router = AppRouter.shared

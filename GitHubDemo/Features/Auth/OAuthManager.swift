@@ -70,7 +70,7 @@ enum OAuthError: Error {
                         print("获取到访问令牌")
                         // 这里需要通知AuthState设置令牌
                         if let token = token {
-                            AuthState().setAccessToken(token)
+                            AuthState.shared.setAccessToken(token)
                         }
                     } catch {
                         print("获取访问令牌失败: \(error)")
