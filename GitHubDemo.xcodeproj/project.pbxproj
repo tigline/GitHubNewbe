@@ -413,7 +413,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GitHubDemo/Info.plist;
-				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "应用需要访问本地网络的原因说明";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "GithubDemo App need to access iPhone network";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -444,7 +444,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GitHubDemo/Info.plist;
-				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "应用需要访问本地网络的原因说明";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "GithubDemo App need to access iPhone network";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
