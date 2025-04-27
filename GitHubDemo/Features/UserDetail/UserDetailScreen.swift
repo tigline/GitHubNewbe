@@ -7,9 +7,6 @@
 
 import SwiftUI
 
-// UserDetailScreen视图模型
-
-
 // 用户详情屏幕
 struct UserDetailScreen: View {
     @Environment(AppRouter.self) private var router

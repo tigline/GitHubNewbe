@@ -10,11 +10,9 @@ import Observation
 
 
 enum AppDestination: Hashable, Identifiable {
-    case login
-    case userList
+    
     case userDetail(username: String)
     case repositoryWebView(url: URL)
-    case me
     
     var id: Self { self }
 }
@@ -131,7 +129,6 @@ enum AppTab: Hashable {
     
     func handleLogout() {
         navigateToRoot()
-        presentFullScreenCover(.login)
     }
 }
 

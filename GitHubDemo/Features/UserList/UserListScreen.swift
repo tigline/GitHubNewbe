@@ -14,7 +14,7 @@ struct UserListScreen: View {
     @State private var searchText = ""
     
     var body: some View {
-        //NavigationStack(path: router.navigationPath) {
+        NavigationStack(path: router.navigationPathBinding()) {
             ZStack {
                 // 背景
                 Color(UIColor.systemBackground)
@@ -39,14 +39,14 @@ struct UserListScreen: View {
                 }
             }
             .navigationTitle("GitHub Users")
-//            .navigationDestination(for: AppDestination.self) { destination in
-//                switch destination {
-//                case .userDetail(let username):
-//                    UserDetailScreen(username: username)
-//                default:
-//                    EmptyView()
-//                }
-//            }
+            .navigationDestination(for: AppDestination.self) { destination in
+                switch destination {
+                case .userDetail(let username):
+                    UserDetailScreen(username: username)
+                default:
+                    EmptyView()
+                }
+            }
             .onAppear {
                 // 首次加载
                 if viewModel.users.isEmpty {
@@ -55,7 +55,7 @@ struct UserListScreen: View {
                     }
                 }
             }
-//        }
+        }
     }
     
     // 搜索栏
